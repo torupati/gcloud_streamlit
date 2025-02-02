@@ -12,6 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
       - name: Build and push Docker image
         run: |
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/streamlit-app:${{ github.sha }} .
