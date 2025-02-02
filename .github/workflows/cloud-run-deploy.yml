@@ -22,5 +22,5 @@ jobs:
         with:
           service: streamlit-app
           image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/streamlit-app:${{ github.sha }}
-          region: us-central1 # Cloud Run リージョンを指定
+          region:  asia-northeast1 # Cloud Run リージョンを指定
           # 必要に応じて、他の Cloud Run デプロイオプション (env vars, etc.) を追加
