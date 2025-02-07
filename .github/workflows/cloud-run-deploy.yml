@@ -11,6 +11,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Build and push Docker image
         run: |
@@ -22,5 +26,6 @@ jobs:
         with:
           service: streamlit-app
           image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/streamlit-app:${{ github.sha }}
-          region: us-central1 # Cloud Run リージョンを指定
-          # 必要に応じて、他の Cloud Run デプロイオプション (env vars, etc.) を追加
+          #region: us-central1
+          region:  asia-northeast1
+          # Add Cloud Run deploy option (env vars, etc.)
