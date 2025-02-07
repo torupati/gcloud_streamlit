@@ -1,0 +1,22 @@
+steps:
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', 'https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME.git'] # repository URL
+    dir: 'hellolit'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0', '.']
+    dir: 'hellolit' # directory of build context
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'gcloud'
+    args: ['run', 'deploy', 'stlit01app',
+           '--image', 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0',
+           '--region', 'asia-northeast1',
+           '--platform', 'managed',
+           '--port', '8501',
+           '--memory', '1G',
+           '--max-instances', '3']
+    dir: 'stlit01app' # 
+
+images:
+- 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0'
