@@ -11,15 +11,26 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+  
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
+      #- uses: google-github-actions/auth@v1
+      #  with:
+      #    workload_identity_provider: projects/my-cloud-run01/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+      #    service_account: 809639188470-compute@developer.gserviceaccount.com
+
+      #- name: Use gcloud CLI
+      #  run: |
+      #    gcloud auth list
+      #    gcloud storage ls
+
       - name: Build and push Docker image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/streamlit-app:${{ github.sha }} .
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/streamlit-app:${{ github.sha }}
+          docker build -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/streamlit-app:${{ github.sha }} .
+          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/streamlit-app:${{ github.sha }}
 
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v1
