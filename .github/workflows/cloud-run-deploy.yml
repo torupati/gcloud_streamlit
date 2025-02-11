@@ -2,31 +2,24 @@ name: Deploy to Cloud Run
 
 on:
   push:
-#    branches: [main]
     branches:
       - '*'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # ID トークンへの書き込み権限を付与
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-  
-      - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Authenticate with Google Cloud
+      - name: Authenticate with Google Cloud (Workload Identity Federation)
         uses: google-github-actions/auth@v1
         with:
           workload_identity_provider: projects/my-cloud-run01/locations/global/workloadIdentityPools/github-pool/providers/github-provider
           service_account: 809639188470-compute@developer.gserviceaccount.com
-
-      - name: Use gcloud CLI
-        run: |
-          gcloud auth list
-          gcloud storage ls
 
       - name: Build and push Docker image
         run: |
@@ -38,7 +31,6 @@ jobs:
         with:
           service: streamlit-app
           image: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPO_NAME }}/streamlit-app:${{ github.sha }}
-          #image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPO_NAME }}/streamlit-app:${{ github.sha }}
-          #region: us-central1
-          region:  asia-northeast1
-          # Add Cloud Run deploy option (env vars, etc.)
+          region: asia-northeast1
+          create-service: true
+          update-service: true
