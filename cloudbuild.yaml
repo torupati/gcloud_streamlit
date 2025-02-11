@@ -4,13 +4,13 @@ steps:
     dir: 'hellolit'
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPO_NAME }}/stlit01app:v0.0', '.']
+    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0', '.']
     dir: 'hellolit' # directory of build context
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'gcloud'
     args: ['run', 'deploy', 'stlit01app',
-           '--image', 'asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPO_NAME }}/stlit01app:v0.0',
+           '--image', 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0',
            '--region', 'asia-northeast1',
            '--platform', 'managed',
            '--port', '8501',
@@ -20,3 +20,8 @@ steps:
 
 images:
 - 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0'
+
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+serviceAccount: github-delivery@my-cloud-run01.iam.gserviceaccount.com
+
