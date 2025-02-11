@@ -1,16 +1,16 @@
 steps:
   - name: 'gcr.io/cloud-builders/git'
-    args: ['clone', 'https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME.git'] # repository URL
+    args: ['clone', 'https://github.com/torupati/gcloud_streamlit.git'] # repository URL
     dir: 'hellolit'
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0', '.']
+    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPO_NAME }}/stlit01app:v0.0', '.']
     dir: 'hellolit' # directory of build context
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'gcloud'
     args: ['run', 'deploy', 'stlit01app',
-           '--image', 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0',
+           '--image', 'asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPO_NAME }}/stlit01app:v0.0',
            '--region', 'asia-northeast1',
            '--platform', 'managed',
            '--port', '8501',
