@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write  # ID トークンへの書き込み権限を付与
+      id-token: write
 
     steps:
       - name: Checkout code
@@ -19,7 +19,8 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           workload_identity_provider: projects/my-cloud-run01/locations/global/workloadIdentityPools/github-pool/providers/github-provider
-          service_account: 809639188470-compute@developer.gserviceaccount.com
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Build and push Docker image
         run: |
