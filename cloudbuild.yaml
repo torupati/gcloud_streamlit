@@ -1,27 +1,20 @@
 steps:
-  - name: 'gcr.io/cloud-builders/git'
-    args: ['clone', 'https://github.com/torupati/gcloud_streamlit.git'] # repository URL
-    dir: 'hellolit'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/foo1/my-python-app:$COMMIT_SHA', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0', '.']
-    dir: 'hellolit' # directory of build context
+    args: ['push', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/foo1/my-python-app:$COMMIT_SHA']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'gcloud'
     args: ['run', 'deploy', 'stlit01app',
-           '--image', 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0',
-           '--region', 'asia-northeast1',
-           '--platform', 'managed',
-           '--port', '8501',
-           '--memory', '1G',
-           '--max-instances', '3']
-    dir: 'stlit01app' # 
+            '--image', 'gcr.io/asia-northeast1-docker.pkg.dev/$PROJECT_ID/my-python-app:$COMMIT_SHA',
+            '--region', 'asia-northeast1',
+            '--platform', 'managed',
+            '--port', '8501',
+            '--memory', '1G',
+            '--max-instances', '3']
 
 images:
-- 'asia-northeast1-docker.pkg.dev/my-clour-run01/foo1/stlit01app:v0.0'
-
-options:
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+  - 'gcr.io/$PROJECT_ID/my-python-app:$COMMIT_SHA'
 serviceAccount: github-delivery@my-cloud-run01.iam.gserviceaccount.com
-
