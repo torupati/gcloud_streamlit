@@ -17,4 +17,6 @@ steps:
 
 images:
   - 'gcr.io/$PROJECT_ID/my-python-app:$COMMIT_SHA'
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 serviceAccount: github-delivery@my-cloud-run01.iam.gserviceaccount.com
