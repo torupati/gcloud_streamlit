@@ -8,15 +8,13 @@ steps:
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'gcloud'
     args: ['run', 'deploy', 'stlit01app',
-            '--image', 'gcr.io/asia-northeast1-docker.pkg.dev/$PROJECT_ID/my-python-app:$COMMIT_SHA',
+            '--image', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/foo1/my-python-app:$COMMIT_SHA', # 修正済み
             '--region', 'asia-northeast1',
             '--platform', 'managed',
             '--port', '8501',
             '--memory', '1G',
             '--max-instances', '3']
 
-images:
-  - 'gcr.io/$PROJECT_ID/my-python-app:$COMMIT_SHA'
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 serviceAccount: github-delivery@my-cloud-run01.iam.gserviceaccount.com
