@@ -1,15 +1,15 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/my-cloud-run01/foo1/my-python-app:latest', '.']
+    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/my-cloud-run01/foo1/my-python-app:v0.1.0', '.']
 #    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/foo1/my-python-app:$COMMIT_SHA', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-northeast1-docker.pkg.dev/my-cloud-run01/foo1/my-python-app:latest']
+    args: ['push', 'asia-northeast1-docker.pkg.dev/my-cloud-run01/foo1/my-python-app:v0.1.0']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'gcloud'
     args: ['run', 'deploy', 'stlit01app',
-            '--image', 'asia-northeast1-docker.pkg.dev/my-cloud-run01/foo1/my-python-app:latest', # 修正済み
+            '--image', 'asia-northeast1-docker.pkg.dev/my-cloud-run01/foo1/my-python-app:v0.1.0', 
             '--region', 'asia-northeast1',
             '--platform', 'managed',
             '--port', '8501',
