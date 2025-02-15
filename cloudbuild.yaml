@@ -15,7 +15,7 @@ steps:
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'gcloud'
-    args: ['run', 'deploy', 'stlit01app',
+    args: ['run', 'deploy', 'myapp',
             '--image', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/foo1/my-python-app:${COMMIT_SHA}', 
             '--region', 'asia-northeast1',
             '--platform', 'managed',
