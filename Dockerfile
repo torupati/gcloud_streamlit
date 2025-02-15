@@ -12,5 +12,9 @@ COPY pages .
 
 EXPOSE 8501
 
-CMD ["streamlit", "run", "app.py", "--server.port=8501"]
+CMD [".venv/bin/streamlit", "run", "app.py", "--server.port=8501"]
 # necessary to set server port in Dockerfile...
+
+#
+# docker build --no-cache -t streamlit-app .
+# docker run -rm -p 8501:8501 --name my-streamlit-app streamlit-app:latest
