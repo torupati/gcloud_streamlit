@@ -5,7 +5,8 @@
 #     --substitutions COMMIT_SHA=$(git rev-parse HEAD) .
 # (2) Substituting variable values
 # https://cloud.google.com/build/docs/configuring-builds/substitute-variable-values
-#
+# (3) Delete image in registry
+# gcloud artifacts docker images delete asia-northeast1-docker.pkg.dev/PROJECT_ID/REPONAME/APP:$(git rev-parse HEAD) --quiet
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/foo1/my-python-app:${COMMIT_SHA}', '.']
