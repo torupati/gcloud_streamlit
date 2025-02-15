@@ -3,9 +3,12 @@ FROM python:3.12-slim
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN bash -c "python3 -m venv .venv && source .venv/bin/activate && \
+    pip install --upgrade pip && \
+    pip install -r requirements.txt"
 
 COPY app.py .
+COPY pages .
 
 EXPOSE 8501
 
