@@ -3,17 +3,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 from scipy.stats import chi2
+import pandas as pd
 
 def plot_covariance_ellipse(mean, cov, nstd=3, ax=None, **kwargs):
     """
-    平均と共分散行列から誤差楕円をプロットする関数
+    Plot cavariance sllipse from mean and covariance
 
     Args:
-        mean (numpy.ndarray): 平均ベクトル
-        cov (numpy.ndarray): 共分散行列
-        nstd (float): 標準偏差の倍数 (楕円の大きさ)
-        ax (matplotlib.axes.Axes): プロットする axes (None の場合は新規作成)
-        **kwargs: 楕円の描画オプション
+        mean (numpy.ndarray): mean vector
+        cov (numpy.ndarray): covariance matrix
+        nstd (float): scale in stdev (ellipse size)
+        ax (matplotlib.axes.Axes): axes to plot (None for newly created)
+        **kwargs: options for Ellipse()
     """
 
     if ax is None:
@@ -83,3 +84,45 @@ ax.legend()
 ax.grid()
 
 st.pyplot(fig)
+
+# ------------------------------------------------------------------------------
+uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+
+    try:
+        x = df['x']
+        y = df['y']
+        points = np.array([x, y]).T  # pointsをnumpy配列に変換
+        num_points = len(points)
+
+        if num_points < 3 : # 3点以上で共分散行列が計算できる。
+            st.write("3つ以上の座標を含むCSVファイルをアップロードしてください。")
+
+        else:
+            mean = np.mean(points, axis=0)
+            cov = np.cov(points, rowvar=False)
+
+            # 点の分布と誤差楕円をプロット
+            fig, ax = plt.subplots()
+            ax.scatter(points[:, 0], points[:, 1], label="data points")
+            plot_covariance_ellipse(mean, cov, nstd=2, ax=ax, edgecolor="b", facecolor="none", label="covariance ellipse")
+
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.set_aspect('equal')
+            ax.set_title("2D Point Distribution with Covariance Ellipse")
+            ax.legend()
+            ax.grid()
+
+            st.pyplot(fig)
+
+    except KeyError:
+        st.write("CSVファイルには'x'と'y'の列が必要です。")
+
+    except ValueError:
+        st.write("座標の値が数値であることを確認してください。")
+
+else:
+    st.write("Upload CSV file。")
