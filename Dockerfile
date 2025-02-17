@@ -8,7 +8,7 @@ RUN bash -c "python3 -m venv .venv && source .venv/bin/activate && \
     pip install -r requirements.txt"
 
 COPY app.py .
-COPY pages .
+COPY pages/*.py /app/pages/
 
 EXPOSE 8501
 
