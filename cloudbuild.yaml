@@ -26,4 +26,4 @@ steps:
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
-serviceAccount: github-delivery@my-cloud-run01.iam.gserviceaccount.com
+serviceAccount: github-delivery@${PROJECT_ID}.iam.gserviceaccount.com
