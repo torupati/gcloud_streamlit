@@ -8,42 +8,34 @@ if not firebase_admin._apps:  # Check if the default app exists
     #cred = credentials.Certificate(st.secrets["firebase_credentials"])
     firebase_admin.initialize_app(cred)
 
-def authenticate_user(email, password):
-    # クライアント側で Firebase Authentication を使用して認証し、
-    # ID トークンを取得する (ここでは省略)
-    # ...
 
-    # ID トークンを検証する (ここでは省略)
-    # ...
-
-    print(f"get user by {email=}")
-    try:
-        user = auth.get_user_by_email(email)
-        st.write(f"User: {user.uid}")
-        return user
-    except auth.UserNotFoundError:
-        return None
-    except Exception as e:
-        print(f"Error authenticating user: {e}")
-        return None
+def login():
+    email = st.text_input("mail address")
+    password = st.text_input("password", type="password")
+    # Get and verty token in client with Firebase Authentication
+    if st.button("Login"):
+        try:
+            user = auth.get_user_by_email(email)
+            st.session_state.user = user
+            st.success(f"Login Success! {user.uid=}")
+        except auth.UserNotFoundError:
+            st.error("User Not Found")
+        except Exception as e:
+            st.error(f"Error{e=}")
 
 
-st.title("Firebase Authentication with Streamlit")
+def logout():
+    if st.button("Logout"):
+        st.session_state.pop("user", None)
+        st.success("Logout")
 
-if "user" not in st.session_state:
-        email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
-        if st.button("Login"):
-            user = authenticate_user(email, password)
-            if user:
-                st.session_state.user = user
-                st.success("Login successful!")
-            else:
-                st.error("Invalid email or password")
+def main():
+    if "user" not in st.session_state:
+        login()
+    else:
+        st.write(f"Welcom {st.session_state.user.email}")
+        logout()
+        st.write("Now you are logged in")
 
-    
-else:
-        st.write(f"Welcome, {st.session_state.user.email}!")
-        if st.button("Logout"):
-            del st.session_state.user
-            st.rerun()
+if __name__ == "__main__":
+    main()
