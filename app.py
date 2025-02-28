@@ -1,48 +1,49 @@
 import streamlit as st
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import auth
 
-st.set_page_config(
-    page_title="Hello",
-    page_icon="👋",
-)
+if not firebase_admin._apps:  # Check if the default app exists
+    cred = credentials.ApplicationDefault()
+    #cred = credentials.Certificate(st.secrets["firebase_credentials"])
+    firebase_admin.initialize_app(cred)
 
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
+def authenticate_user(email, password):
+    # クライアント側で Firebase Authentication を使用して認証し、
+    # ID トークンを取得する (ここでは省略)
+    # ...
 
-# login form
-if not st.session_state.logged_in:
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
-    if st.button("Login"):
-        if username == "admin" and password == "password":  # authentification
-            st.session_state.logged_in = True
+    # ID トークンを検証する (ここでは省略)
+    # ...
+
+    print(f"get user by {email=}")
+    try:
+        user = auth.get_user_by_email(email)
+        st.write(f"User: {user.uid}")
+        return user
+    except auth.UserNotFoundError:
+        return None
+    except Exception as e:
+        print(f"Error authenticating user: {e}")
+        return None
+
+
+st.title("Firebase Authentication with Streamlit")
+
+if "user" not in st.session_state:
+        email = st.text_input("Email")
+        password = st.text_input("Password", type="password")
+        if st.button("Login"):
+            user = authenticate_user(email, password)
+            if user:
+                st.session_state.user = user
+                st.success("Login successful!")
+            else:
+                st.error("Invalid email or password")
+
+    
+else:
+        st.write(f"Welcome, {st.session_state.user.email}!")
+        if st.button("Logout"):
+            del st.session_state.user
             st.rerun()
-        else:
-            st.error("Invalid username or password")
-
-if st.session_state.logged_in:
-    st.title("Welcome!")
-    st.write("This content is only visible to logged-in users.")
-    st.write("# Welcome to Streamlit! 👋")
-    st.sidebar.success("Select a demo above.")
-
-    st.markdown(
-    """
-    Streamlit is an open-source app framework built specifically for
-    Machine Learning and Data Science projects.
-    **👈 Select a demo from the sidebar** to see some examples
-    of what Streamlit can do!
-    ### Want to learn more?
-    - Check out [streamlit.io](https://streamlit.io)
-    - Jump into our [documentation](https://docs.streamlit.io)
-    - Ask a question in our [community
-        forums](https://discuss.streamlit.io)
-    ### See more complex demos
-    - Use a neural net to [analyze the Udacity Self-driving Car Image
-        Dataset](https://github.com/streamlit/demo-self-driving)
-    - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
-    """
-    )
-    if st.button("Logout"):
-        st.session_state.logged_in = False
-        st.rerun()
-        #st.experimental_rerun was deprecated in version 1.27.0. Use st.rerun instead
