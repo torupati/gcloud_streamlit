@@ -19,7 +19,7 @@ WORKDIR /app
 COPY . /app/
 COPY app.py /app/
 COPY pages/*.py /app/pages/
-CMD ["streamlit", "run", "app.py", "--server.port", "8080"]
+CMD ["streamlit", "run", "app.py", "--server.port", "8501"]
 #
 # docker build --no-cache -t streamlit-app .
 # docker run -rm -p 8501:8501 --name my-streamlit-app streamlit-app:latest
