@@ -15,7 +15,10 @@ def login():
     # Get and verty token in client with Firebase Authentication
     if st.button("Login"):
         try:
-            user = auth.get_user_by_email(email)
+            user = auth.get_user_by_email(email) # unsecure
+            #decoded_token = auth.verify_id_token(token)
+            #uid = decoded_token['uid']
+            #user = auth.get_user(uid)
             st.session_state.user = user
             st.success(f"Login Success! {user.uid=}")
         except auth.UserNotFoundError:
