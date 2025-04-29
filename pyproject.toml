@@ -13,6 +13,9 @@ wave = "^0.0.2"
 matplotlib = "^3.10.1"
 streamlit-js-eval = "^0.1.7"
 scipy = "^1.15.2"
+folium = "^0.19.5"
+streamlit-folium = "^0.25.0"
+langchain-openai = "^0.3.14"
 
 
 [tool.poetry.group.dev.dependencies]
