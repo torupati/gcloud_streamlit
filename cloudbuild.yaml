@@ -22,7 +22,8 @@ steps:
             '--platform', 'managed',
             '--port', '8501',
             '--memory', '1G',
-            '--max-instances', '3']
+            '--max-instances', '3',
+            '--ingress', 'all']
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET

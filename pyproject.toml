@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "gcloud-streamlit"
+version = "0.1.0"
+description = ""
+authors = ["torupa <xpt77@outlook.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+streamlit = "^1.42.2"
+firebase-admin = "^6.6.0"
+wave = "^0.0.2"
+matplotlib = "^3.10.1"
+streamlit-js-eval = "^0.1.7"
+scipy = "^1.15.2"
+folium = "^0.19.5"
+streamlit-folium = "^0.25.0"
+langchain-openai = "^0.3.14"
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^6.0.1"
+black = "^25.1.0"
+flake8 = "^7.1.2"
+pip-audit = "^2.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
